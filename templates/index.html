@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitor Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.5">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <div class="dashboard">
+            <!-- CPU Card -->
+            <div class="card" id="cpu-card">
+                <div class="card-glow"></div>
+                <div class="card-header">
+                    <span class="icon">💻</span>
+                    <h2>CPU</h2>
+                </div>
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="gauge-fill cpu-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3"></circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <span class="value" id="cpu-val">0</span><span class="unit">%</span>
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat">
+                        <span class="label">TEMP</span>
+                        <span class="val" id="cpu-temp">0.0°C</span>
+                    </div>
+                </div>
+                <div class="cores-section">
+                    <div class="cores-title">KÄRNOR</div>
+                    <div class="cores-grid" id="cpu-cores"></div>
+                </div>
+                <div class="processes-section">
+                    <div class="processes-title">TOP PROCESSER</div>
+                    <div class="processes-list" id="cpu-processes"></div>
+                </div>
+            </div>
+
+            <!-- GPU Card -->
+            <div class="card" id="gpu-card">
+                <div class="card-glow"></div>
+                <div class="card-header">
+                    <span class="icon">🎮</span>
+                    <h2>GPU</h2>
+                </div>
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="gauge-fill gpu-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3"></circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <span class="value" id="gpu-val">0</span><span class="unit">%</span>
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat">
+                        <span class="label">TEMP</span>
+                        <span class="val" id="gpu-temp">0.0°C</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">VRAM</span>
+                        <span class="val" id="gpu-vram">0 / 0 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RAM Card -->
+            <div class="card" id="ram-card">
+                <div class="card-glow"></div>
+                <div class="card-header">
+                    <span class="icon">⚡</span>
+                    <h2>RAM</h2>
+                </div>
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="gauge-fill ram-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3"></circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <span class="value" id="ram-val">0</span><span class="unit">%</span>
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat">
+                        <span class="label">ANVÄNDT</span>
+                        <span class="val" id="ram-used">0.0 GB</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">TOTALT</span>
+                        <span class="val" id="ram-total">0.0 GB</span>
+                    </div>
+                </div>
+                <div class="processes-section">
+                    <div class="processes-title">TOP PROCESSER</div>
+                    <div class="processes-list" id="ram-processes"></div>
+                </div>
+            </div>
+
+            <!-- Storage & Net Card -->
+            <div class="card" id="io-card">
+                <div class="card-glow"></div>
+                <div class="card-header">
+                    <span class="icon">🌐</span>
+                    <h2>IO & NÄT</h2>
+                </div>
+                <div class="io-details">
+                    <div class="io-item">
+                        <span class="io-icon">⬇️</span>
+                        <div class="io-info">
+                            <span class="label">DOWNLOAD</span>
+                            <span class="val" id="net-down">0.0 B/s</span>
+                        </div>
+                    </div>
+                    <div class="io-item">
+                        <span class="io-icon">⬆️</span>
+                        <div class="io-info">
+                            <span class="label">UPLOAD</span>
+                            <span class="val" id="net-up">0.0 B/s</span>
+                        </div>
+                    </div>
+                    <div class="io-divider"></div>
+                    <div id="disk-container" class="disk-container"></div>
+                </div>
+            </div>
+
+            <!-- Clock Card -->
+            <div class="card" id="clock-card">
+                <div class="card-glow"></div>
+                <div class="clock-display">
+                    <div class="time" id="time-val">00:00:00</div>
+                    <div class="date" id="date-val">FREDAG, 26 JUN</div>
+                    <div class="uptime-wrapper">
+                        <span class="label">UPTIME: </span>
+                        <span class="val" id="uptime-val">0h 0m</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=1.5"></script>
+</body>
+</html>

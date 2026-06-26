@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Lian Li Sensor Panel App
+Comment=Frameless native monitor window for Lian Li screen
+Exec=bash -c "distrobox enter lianli-box -- python3 ~/lianlionBazzite/gui_app.py"
+StartupNotify=false
+Terminal=false
+Icon=utilities-system-monitor
+Categories=System;Monitor;
+X-GNOME-Autostart-enabled=true
+X-KDE-autostart-after=panel

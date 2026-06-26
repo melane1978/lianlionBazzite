@@ -1,0 +1,12 @@
+[Unit]
+Description=Lian Li 8.8" Custom Sensor Dashboard
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/distrobox enter lianli-box -- python3 %h/lianlionBazzite/app.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

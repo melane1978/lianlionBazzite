@@ -1,0 +1,26 @@
+# Wireless TX/RX dongles
+SUBSYSTEM=="usb", ATTR{idVendor}=="0416", ATTR{idProduct}=="8040", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0416", ATTR{idProduct}=="8041", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", ATTR{idProduct}=="e304", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", ATTR{idProduct}=="e305", MODE="0666"
+
+# Strimer Plus
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a200", MODE="0666"
+
+# ENE AL/SL Fan controllers
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a100", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a101", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a102", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a103", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a104", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a105", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0cf2", ATTR{idProduct}=="a106", MODE="0666"
+
+# TL Fan controller & TLLCD
+SUBSYSTEM=="usb", ATTR{idVendor}=="0416", ATTR{idProduct}=="7372", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="04fc", ATTR{idProduct}=="7393", MODE="0666"
+
+# EVDI permissions för desktop mode
+SUBSYSTEM=="module", KERNEL=="evdi", RUN+="/bin/chmod 0666 /sys/devices/evdi/add"
+# TURZX/WCH Skrivbordsläge (Desktop Mode)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", MODE="0666"

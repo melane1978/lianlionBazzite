@@ -1,0 +1,717 @@
+/* Custom CSS Design System - System Monitor Dashboard */
+
+:root {
+    --bg-color: #04060a;
+    --card-bg: rgba(10, 14, 23, 0.55);
+    --card-border: rgba(255, 255, 255, 0.07);
+    --text-primary: #ffffff;
+    --text-secondary: #7f8c9d;
+    
+    /* Neon Glow Accents */
+    --cpu-color: #00f0ff;
+    --cpu-glow: rgba(0, 240, 255, 0.25);
+    
+    --gpu-color: #a000ff;
+    --gpu-glow: rgba(160, 0, 255, 0.25);
+    
+    --ram-color: #ff007f;
+    --ram-glow: rgba(255, 0, 127, 0.25);
+    
+    --io-color: #ff9f00;
+    --io-glow: rgba(255, 159, 0, 0.25);
+    
+    --clock-color: #00ff66;
+    --clock-glow: rgba(0, 255, 102, 0.25);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Base Wrapper */
+.dashboard-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+}
+
+/* Grid Layout */
+.dashboard {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive Grid direction based on screen aspect ratio */
+@media (min-aspect-ratio: 1/1) {
+    /* Landscape (1920x480 style) */
+    .dashboard {
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: 1fr;
+    }
+}
+
+@media (max-aspect-ratio: 1/1) {
+    /* Portrait (480x1920 / 480x1980 style) */
+    .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1.3fr 1.3fr 1fr 1.6fr 1fr;
+        gap: 16px;
+        height: 100%;
+        overflow-y: hidden;
+    }
+    body {
+        overflow: hidden;
+    }
+    .dashboard-wrapper {
+        padding: 16px;
+    }
+    .card {
+        padding: 16px 20px;
+        border-radius: 16px;
+    }
+    .card-header {
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+    .card-header .icon {
+        font-size: 2.1rem;
+    }
+    .card-header h2 {
+        font-size: 1.9rem;
+    }
+    #cpu-card .gauge-container, #gpu-card .gauge-container {
+        width: 155px;
+        height: 155px;
+        margin: 4px auto;
+    }
+    #cpu-card .gauge-text .value, #gpu-card .gauge-text .value {
+        font-size: 2.5rem;
+    }
+    #cpu-card .gauge-text .unit, #gpu-card .gauge-text .unit {
+        font-size: 1.1rem;
+    }
+    #ram-card .gauge-container {
+        width: 180px;
+        height: 180px;
+        margin: 8px auto;
+    }
+    #ram-card .gauge-text .value {
+        font-size: 2.9rem;
+    }
+    #ram-card .gauge-text .unit {
+        font-size: 1.25rem;
+    }
+    .stats-row {
+        margin: 8px 0;
+        gap: 16px;
+    }
+    .stat .label {
+        font-size: 1.1rem;
+    }
+    .stat .val {
+        font-size: 1.55rem;
+    }
+    .sparkline-wrapper {
+        height: 65px;
+        margin-top: 6px;
+    }
+    .io-details {
+        gap: 14px;
+    }
+    .io-item {
+        gap: 14px;
+    }
+    .io-icon {
+        font-size: 1.7rem;
+    }
+    .io-info .label {
+        font-size: 0.9rem;
+    }
+    .io-info .val {
+        font-size: 1.35rem;
+    }
+    .disk-info {
+        font-size: 1.15rem;
+    }
+    .disk-usage-text {
+        font-size: 0.95rem;
+    }
+    .disk-progress-bar {
+        height: 8px;
+    }
+    .clock-display {
+        gap: 14px;
+    }
+    .clock-display .time {
+        font-size: 3.6rem;
+    }
+    .clock-display .date {
+        font-size: 1.6rem;
+    }
+    .uptime-wrapper {
+        padding: 6px 14px;
+    }
+    .uptime-wrapper .label {
+        font-size: 0.95rem;
+    }
+    .uptime-wrapper .val {
+        font-size: 1.15rem;
+    }
+    .processes-section {
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        padding-top: 6px;
+        margin-top: 6px;
+    }
+    .processes-title {
+        font-size: 1.0rem;
+        color: var(--text-secondary);
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+    .processes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+    }
+    .process-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+    .process-item .proc-name {
+        text-transform: lowercase;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+    #cpu-processes .process-item .proc-name {
+        color: var(--cpu-color);
+        text-shadow: 0 0 4px var(--cpu-glow);
+    }
+    #ram-processes .process-item .proc-name {
+        color: var(--ram-color);
+        text-shadow: 0 0 4px var(--ram-glow);
+    }
+    .process-item .proc-val {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+    .cores-section {
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        padding-top: 6px;
+        margin-top: 6px;
+    }
+    .cores-title {
+        font-size: 1.0rem;
+        color: var(--text-secondary);
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+    .cores-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px 12px;
+        width: 100%;
+    }
+    .core-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+    .core-label {
+        color: var(--text-secondary);
+        width: 24px;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+    .core-bar {
+        flex-grow: 1;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 0 8px;
+    }
+    .core-bar-fill {
+        height: 100%;
+        background-color: var(--cpu-color);
+        box-shadow: 0 0 5px var(--cpu-color);
+        border-radius: 3px;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    .core-val {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--text-primary);
+        font-size: 0.85rem;
+        width: 32px;
+        text-align: right;
+    }
+}
+
+/* Processes List Styles (Generic/Landscape) */
+.processes-section {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.processes-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.processes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.process-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.process-item .proc-name {
+    text-transform: lowercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+}
+
+#cpu-processes .process-item .proc-name {
+    color: var(--cpu-color);
+}
+
+#ram-processes .process-item .proc-name {
+    color: var(--ram-color);
+}
+
+.process-item .proc-val {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--text-primary);
+}
+
+/* Card Styling - Glassmorphism */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Neon Backglow on Cards */
+.card-glow {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    top: -75px;
+    left: -75px;
+    filter: blur(50px);
+    opacity: 0.15;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+#cpu-card .card-glow { background-color: var(--cpu-color); }
+#gpu-card .card-glow { background-color: var(--gpu-color); }
+#ram-card .card-glow { background-color: var(--ram-color); }
+#io-card .card-glow { background-color: var(--io-color); }
+#clock-card .card-glow { background-color: var(--clock-color); }
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.card-header .icon {
+    font-size: 1.2rem;
+}
+
+.card-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+#cpu-card h2 { color: var(--cpu-color); text-shadow: 0 0 5px var(--cpu-glow); }
+#gpu-card h2 { color: var(--gpu-color); text-shadow: 0 0 5px var(--gpu-glow); }
+#ram-card h2 { color: var(--ram-color); text-shadow: 0 0 5px var(--ram-glow); }
+#io-card h2 { color: var(--io-color); text-shadow: 0 0 5px var(--io-glow); }
+
+/* SVG Progress Gauge */
+.gauge-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.gauge {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.04);
+    stroke-width: 8;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cpu-fill {
+    stroke: var(--cpu-color);
+    filter: drop-shadow(0 0 4px var(--cpu-color));
+}
+
+.gpu-fill {
+    stroke: var(--gpu-color);
+    filter: drop-shadow(0 0 4px var(--gpu-color));
+}
+
+.ram-fill {
+    stroke: var(--ram-color);
+    filter: drop-shadow(0 0 4px var(--ram-color));
+}
+
+.gauge-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: baseline;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.gauge-text .value {
+    font-size: 1.4rem;
+    font-weight: 900;
+}
+
+.gauge-text .unit {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat .label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.stat .val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Sparklines */
+.sparkline-wrapper {
+    width: 100%;
+    height: 40px;
+    margin-top: 4px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.sparkline-wrapper canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* IO Details */
+.io-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.io-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.io-icon {
+    font-size: 1.1rem;
+}
+
+.io-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.io-info .label {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.io-info .val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--text-primary);
+}
+
+.io-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 2px 0;
+}
+
+/* Disk List Styles */
+.disk-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.disk-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.disk-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.disk-label {
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+}
+
+.disk-usage-text {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.disk-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.disk-progress-fill {
+    height: 100%;
+    background-color: var(--io-color);
+    box-shadow: 0 0 5px var(--io-color);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+/* Clock & Uptime Display */
+.clock-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    gap: 10px;
+}
+
+.clock-display .time {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--clock-color);
+    text-shadow: 0 0 8px var(--clock-glow);
+    letter-spacing: 1px;
+}
+
+.clock-display .date {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.uptime-wrapper {
+    margin-top: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.uptime-wrapper .label {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.uptime-wrapper .val {
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Generic Cores List Styles */
+.cores-section {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.cores-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.cores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px 6px;
+    width: 100%;
+}
+
+.core-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.core-label {
+    color: var(--text-secondary);
+    width: 18px;
+    font-size: 0.7rem;
+    text-align: left;
+}
+
+.core-bar {
+    flex-grow: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 4px;
+}
+
+.core-bar-fill {
+    height: 100%;
+    background-color: var(--cpu-color);
+    box-shadow: 0 0 5px var(--cpu-color);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.core-val {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--text-primary);
+    font-size: 0.7rem;
+    width: 24px;
+    text-align: right;
+}
