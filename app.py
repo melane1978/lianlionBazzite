@@ -52,7 +52,10 @@ def get_cpu_temp():
 
 
 def get_nvidia_gpu_stats():
-    if shutil.which('distrobox-host-exec'):
+    # Detect if running inside a container
+    is_container = os.path.exists('/run/.containerenv') or os.path.exists('/.dockerenv')
+    
+    if is_container and shutil.which('distrobox-host-exec'):
         cmd = ['distrobox-host-exec', 'nvidia-smi']
     elif shutil.which('nvidia-smi'):
         cmd = ['nvidia-smi']
