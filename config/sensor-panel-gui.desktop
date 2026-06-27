@@ -2,7 +2,7 @@
 Type=Application
 Name=Lian Li Sensor Panel App
 Comment=Frameless native monitor window for Lian Li screen
-Exec=bash -c "distrobox enter lianli-box -- python3 ~/lianlionBazzite/gui_app.py"
+Exec=bash -c "bash ~/lianlionBazzite/launch_gui.sh"
 StartupNotify=false
 Terminal=false
 Icon=utilities-system-monitor
