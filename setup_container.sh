@@ -27,4 +27,7 @@ sudo cp config/99-lianli.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
+echo "==> Setting up evdi module configuration to pre-create display device (requires sudo)..."
+sudo cp config/evdi.conf /etc/modprobe.d/
+
 echo "==> Done! The sensor panel service has been started, and autostart is enabled."

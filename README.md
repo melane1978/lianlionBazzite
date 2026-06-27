@@ -68,7 +68,7 @@ The GUI window wrapper starts automatically on desktop login via KDE/GNOME Autos
 - `gui_app.py` - PyQt6 window wrapper rendering the web interface.
 - `distrobox.ini` - Declarative definition of the Distrobox container environment.
 - `setup_container.sh` - Automation script for setting up the container, configuring udev rules, and copying configs.
-- `config/` - Backups of the systemd service, autostart `.desktop` files, and `99-lianli.rules` (enabling non-root access to EVDI virtual display adding).
+- `config/` - Backups of the systemd service, autostart `.desktop` files, `99-lianli.rules` (udev rules for EVDI permissions), and `evdi.conf` (pre-creates the virtual display card at boot to resolve container mapping timing issues).
 - `templates/index.html` - HTML layout for the dashboard.
 - `static/css/style.css` - CSS styles (glassmorphism, layouts, and neon accents).
 - `static/js/main.js` - JS frontend logic for polling the API and updating elements.
