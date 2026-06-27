@@ -22,5 +22,6 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="04fc", ATTR{idProduct}=="7393", MODE="0666"
 
 # EVDI permissions för desktop mode
 SUBSYSTEM=="module", KERNEL=="evdi", RUN+="/bin/chmod 0666 /sys/devices/evdi/add"
+KERNEL=="card[0-9]*", SUBSYSTEM=="drm", KERNELS=="evdi.[0-9]*", MODE="0666"
 # TURZX/WCH Skrivbordsläge (Desktop Mode)
 SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", MODE="0666"
