@@ -44,16 +44,19 @@ class SensorPanelApp(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         
         # Set and store geometry to cover target screen (Lian Li display)
-        if target_geometry:
-            self.target_geometry = target_geometry
+        self.target_geometry = target_geometry
+        if self.target_geometry:
             self.setGeometry(self.target_geometry)
             print(f"[INFO] Positioned on target screen: {self.target_geometry.x()}, {self.target_geometry.y()} ({self.target_geometry.width()}x{self.target_geometry.height()})")
         else:
-            # Fallback size
-            from PyQt6.QtCore import QRect
+            # Fallback size and start screen detection timer
+            from PyQt6.QtCore import QRect, QTimer
             self.target_geometry = QRect(0, 0, 480, 1920)
             self.setGeometry(self.target_geometry)
-            print("[WARNING] Lian Li screen not detected. Initialized with default size 480x1920.")
+            print("[WARNING] Lian Li screen not detected at startup. Starting screen polling timer...")
+            self.screen_timer = QTimer(self)
+            self.screen_timer.timeout.connect(self.poll_screens)
+            self.screen_timer.start(2000) # Poll every 2 seconds
             
         # Create web view using custom subclass to capture mouse/keyboard events
         self.browser = CustomWebView(self)
@@ -94,6 +97,20 @@ class SensorPanelApp(QMainWindow):
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.activated.connect(self.tray_icon_activated)
         self.tray_icon.show()
+
+    def poll_screens(self):
+        print("[INFO] Polling for Lian Li screen...")
+        for i, screen in enumerate(QApplication.screens()):
+            geom = screen.geometry()
+            ratio = geom.width() / geom.height() if geom.height() > 0 else 0
+            # Check aspect ratio for 480x1920 (0.25) or 1920x480 (4.0)
+            if abs(ratio - 0.25) < 0.05 or abs(ratio - 4.0) < 0.1:
+                self.target_geometry = geom
+                self.setGeometry(self.target_geometry)
+                self.screen_timer.stop()
+                print(f"[INFO] Detected target Lian Li display dynamically on Screen #{i}! Repositioned to: {self.target_geometry.x()}, {self.target_geometry.y()}")
+                self.browser.reload()
+                break
 
     def restore_window(self):
         self.showNormal()
